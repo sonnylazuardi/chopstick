@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chopstick Game</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- change here -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <!-- change end -->
+  <link rel="stylesheet" href="css/dragdrop.css"/>
+  <link rel="stylesheet" href="css/app.css"/>
+  
+  <!-- change here -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <!-- change end  -->
+
+</head>
+<body ng-cloak>
+  <div class="wrapper">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="header">
+        <div class="logo"></div>
+      </div>
+      <div class="content">
+        <div ng-view></div>
+        <div class="help">
+          <h1>How to Play</h1>
+          <div>
+            <strong>Chopstick</strong> is a hand game for two players, in which players extend a number of fingers from each hand and transfer those scores by taking turns to tap one hand against another. 
+            <a href="http://en.wikipedia.org/wiki/Chopsticks_(hand_game)">Taken from Wikipedia</a>
+          </div>
+          <div class="explore">
+            <a href="http://www.wikihow.com/Play-Chopsticks" class="btn btn-default btn-lg">Explore More <small>(WikiHow)</small></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        Chopstick game <span app-version></span> &copy; 2014<br>
+        Built with <span class="glyphicon glyphicon-heart"></span> by <a href="http://twitter.com/sonnylazuardi">@sonnylazuardi</a>
+      </div>    
+    </div>
+  </div>
+  
+<!-- change here -->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular-route.js"></script>
+<script src="//cdn.firebase.com/js/client/1.0.18/firebase.js"></script>
+<script src="//cdn.firebase.com/js/simple-login/1.6.2/firebase-simple-login.js"></script>
+<script src="//cdn.firebase.com/libs/angularfire/0.8.0/angularfire.min.js"></script>
+<!-- change end -->
+
+  <!--<script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/firebase/firebase.js"></script>
+  <script src="bower_components/firebase-simple-login/firebase-simple-login.js"></script>
+  <script src="bower_components/angularfire/dist/angularfire.js"></script>-->
+  <script src="lib/ngDraggable.js"></script>
+
+
+  <script src="js/app.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/decorators.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/firebase.utils.js"></script>
+  <script src="js/simpleLogin.js"></script>
+  <script src="js/changeEmail.js"></script>
+</body>
+</html>
