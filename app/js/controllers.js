@@ -53,7 +53,7 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
       var temp1, temp2; //check whether just swapped or not  
       temp1 = $scope.getParent(target)[0].val;
       temp2 = $scope.getParent(target)[1].val;
-      if (target.id = 0) {
+      if (target.id == 0) {
         temp1 += given;
         temp2 -= given;
       } else {
