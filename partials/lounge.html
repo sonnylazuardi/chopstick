@@ -9,8 +9,10 @@
 
 <div class="users">
 	<div ng-repeat="user in onlineusers" class="profile-list">
-		<img ng-src="{{user.avatar}}" alt="">
-		{{user.name}} <strong>({{user.score}})</strong> {{user.status}}
-		<a ng-click="duel(user.uid)" class="btn btn-default">duel</a>
+		<div ng-show="user.uid != profile.uid">
+			<img ng-src="{{user.avatar}}" alt="">
+			{{user.name}} <strong>({{user.score}})</strong> {{user.status}}
+			<a ng-click="duel(user.uid)" class="btn btn-default">duel</a>
+		</div>
 	</div>
 </div>

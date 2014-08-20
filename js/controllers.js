@@ -7,6 +7,7 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
     var profile = fbutil.syncObject(['users_login', user.uid]);
     profile.$bindTo($scope, 'profile');
 
+
     var onlineusers = fbutil.syncObject('presences');
     onlineusers.$bindTo($scope, 'onlineusers');
 
@@ -25,7 +26,8 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
         score: snap.score,
         status: '★ online'
       };
-      var userRef = listRef.push(userObj);
+      var userRef = fbutil.ref('presences', user.uid);
+      userRef.set(userObj);
 
       $scope.duel = function(uid) {
         console.log('duels');

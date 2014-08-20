@@ -86,6 +86,7 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
         }
         user.name = name;
         user.avatar = avatar;
+        user.uid = id;
         user.$save();
         def.resolve(user);
       });
