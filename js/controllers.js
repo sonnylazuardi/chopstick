@@ -15,64 +15,64 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
 
     $scope.versus = {};
 
-    profile.$loaded().then(function(snap) {
-      var listRef = fbutil.ref('presences');
-      console.log(snap);
-      var userObj = {
-        uid: user.uid,
-        name: snap.name,
-        avatar: snap.avatar,
-        score: snap.score,
-        status: '★ online'
-      };
-      var userRef = listRef.push(userObj);
+    // profile.$loaded().then(function(snap) {
+    //   var listRef = fbutil.ref('presences');
+    //   console.log(snap);
+    //   var userObj = {
+    //     uid: user.uid,
+    //     name: snap.name,
+    //     avatar: snap.avatar,
+    //     score: snap.score,
+    //     status: '★ online'
+    //   };
+    //   var userRef = listRef.push(userObj);
 
-      $scope.duel = function(uid) {
-        console.log('duels');
-        var roomid = user.uid + '::' + uid;
-        var dueling = fbutil.syncObject(['duels', uid]);
-        dueling.versus = userObj;
-        dueling.roomid = roomid;
-        dueling.$save();
+    //   $scope.duel = function(uid) {
+    //     console.log('duels');
+    //     var roomid = user.uid + '::' + uid;
+    //     var dueling = fbutil.syncObject(['duels', uid]);
+    //     dueling.versus = userObj;
+    //     dueling.roomid = roomid;
+    //     dueling.$save();
 
-        var check_accepted = fbutil.syncObject(['versus', roomid]);
-        check_accepted.$watch(function() {
-          if (check_accepted.start)
-            $location.path('versus/'+roomid);
-        })
-      }
+    //     var check_accepted = fbutil.syncObject(['versus', roomid]);
+    //     check_accepted.$watch(function() {
+    //       if (check_accepted.start)
+    //         $location.path('versus/'+roomid);
+    //     })
+    //   }
 
-      $scope.accept_duel = function(roomid) {
-        console.log('accept duels');
-        var dueling = fbutil.ref('duels', user.uid);
-        dueling.remove();
-        //redirect to room id
-        $location.path('versus/'+roomid);
-      }
+    //   $scope.accept_duel = function(roomid) {
+    //     console.log('accept duels');
+    //     var dueling = fbutil.ref('duels', user.uid);
+    //     dueling.remove();
+    //     //redirect to room id
+    //     $location.path('versus/'+roomid);
+    //   }
 
-      var presenceRef = fbutil.ref('.info', 'connected');
-      presenceRef.on('value', function(snap) {
-        userRef.onDisconnect().remove();
-      });
+    //   var presenceRef = fbutil.ref('.info', 'connected');
+    //   presenceRef.on('value', function(snap) {
+    //     userRef.onDisconnect().remove();
+    //   });
 
-      var onIdle = function () {
-        userRef.update({status: '☆ idle'});
-      }
-      var onAway = function () {
-        userRef.update({status: '☄ away'});
-      }
-      var onBack = function () {
-        userRef.update({status: '★ online'});
-      }
+    //   var onIdle = function () {
+    //     userRef.update({status: '☆ idle'});
+    //   }
+    //   var onAway = function () {
+    //     userRef.update({status: '☄ away'});
+    //   }
+    //   var onBack = function () {
+    //     userRef.update({status: '★ online'});
+    //   }
 
-      var idle = new $window.Idle({
-        onHidden : onIdle,
-        onVisible : onBack,
-        onAway : onAway,
-        onAwayBack : onBack,
-        awayTimeout : 8000 //away with default value of the textbox
-      });
-    });
+    //   var idle = new $window.Idle({
+    //     onHidden : onIdle,
+    //     onVisible : onBack,
+    //     onAway : onAway,
+    //     onAwayBack : onBack,
+    //     awayTimeout : 8000 //away with default value of the textbox
+    //   });
+    // });
   }])
 
   .controller('GameoverCtrl', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location) {
