@@ -67,13 +67,14 @@ angular.module('myApp.directives', ['simpleLogin'])
     };
   }])
 
-  .directive('profile', ['simpleLogin', '$location', function(simpleLogin, $location) {
+  .directive('profile', ['simpleLogin', 'fbutil', '$location', function(simpleLogin, fbutil, $location) {
     return {
       restrict: 'A',
       templateUrl: 'partials/profile.html',
       link: function(scope, el) {
-        simpleLogin.watch(function(my_profile) {
-          scope.my_profile = my_profile;
+        var my_profile = simpleLogin.getUser().then(function(my_user) {
+          var sync = fbutil.syncObject(['users_login', my_user.uid]);
+          sync.$bindTo(scope, 'my_profile');
         });
 
         scope.logout = function() {
