@@ -89,6 +89,8 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
         alert('Not your turn');
       } else if (source.source == target.source && source.id == target.id) {
         alert('You cannot drop here...');
+      } else if (target.val == 0) {
+        alert('You cannot drop to zero...');
       } else if (source.source != target.source) { //diffrent source
         target.val += source.val;
         if (target.val > 5) {
