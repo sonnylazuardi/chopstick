@@ -156,7 +156,7 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
         alert('Not your turn');
       } else if (source.source == target.source && source.id == target.id) {
         alert('You cannot drop here...');
-      } else if (target.val == 0) {
+      } else if (target.val == 0 && (source.source != target.source)) {
         alert('You cannot drop to zero...');
       } else if (source.source != target.source) { //diffrent source
         target.val += source.val;
@@ -323,7 +323,7 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
         alert("It's not your turn");
       } else if (source.source == target.source && source.id == target.id) {
         alert('You cannot drop here...');
-      } else if (target.val == 0) {
+      } else if (target.val == 0 && (source.source != target.source)) {
         alert('You cannot drop to zero...');
       } else if (source.source != target.source) { //diffrent source
         target.val += source.val;
