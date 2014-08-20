@@ -15,6 +15,8 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
     duels.$bindTo($scope, 'duels');
 
     $scope.versus = {};
+    $scope.timer = 20;
+    $scope.duel_id = 0;
 
     profile.$loaded().then(function(snap) {
       var listRef = fbutil.ref('presences');
@@ -29,13 +31,47 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
       var userRef = fbutil.ref('presences', user.uid);
       userRef.set(userObj);
 
+      $scope.do_timer = function(callback) {
+        setTimeout(function() {
+          if ($scope.timer <= 0) {
+            callback();
+          } else {
+            $scope.timer--;
+            $scope.$apply();
+            $scope.do_timer(callback);
+          }
+        }, 1000);
+      }
+
+      $scope.cancel_duel = function() {
+        if ($scope.duel_id != 0) {
+          var dueling = fbutil.ref('duels', $scope.duel_id);
+          dueling.remove();
+          $scope.duel_id = 0;
+          $scope.timer = 0;
+        }
+      }
+
       $scope.duel = function(uid) {
         console.log('duels');
+        
         var roomid = user.uid + '::' + uid;
         var dueling = fbutil.syncObject(['duels', uid]);
         dueling.versus = userObj;
         dueling.roomid = roomid;
         dueling.$save();
+
+        $scope.duel_id = uid;
+        $scope.timer = 20;
+
+        $scope.do_timer($scope.cancel_duel);
+
+        var check_cancel = fbutil.syncObject(['duels', uid]);
+        check_cancel.$watch(function() {
+          if (!check_cancel.roomid) {
+            $scope.cancel_duel();
+          }
+        });
 
         var check_accepted = fbutil.syncObject(['versus', roomid]);
         check_accepted.$watch(function() {
@@ -50,6 +86,12 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
         dueling.remove();
         //redirect to room id
         $location.path('versus/'+roomid);
+      }
+
+      $scope.reject_duel = function() {
+        console.log('accept duels');
+        var dueling = fbutil.ref('duels', user.uid);
+        dueling.remove();
       }
 
       var presenceRef = fbutil.ref('.info', 'connected');

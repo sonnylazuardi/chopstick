@@ -1,6 +1,7 @@
 <div class="duels" ng-show="duels.versus">
 	You're challanged by {{duels.versus.name}}
-	<a ng-click="accept_duel(duels.roomid)" class="btn btn-warning">Accept</a>
+	<a ng-click="accept_duel(duels.roomid)" class="btn btn-default">Accept</a> 
+	<a ng-click="reject_duel()" class="btn btn-default">Reject</a>
 </div>
 
 <div profile></div>
@@ -8,8 +9,12 @@
 <h2>Online Users</h2>
 
 <div class="users">
-	<div ng-repeat="user in onlineusers" class="profile-list">
-		<div ng-show="user.uid != profile.uid">
+	<div ng-repeat="user in onlineusers">
+		<div ng-show="user.uid != profile.uid" class="profile-list">
+			<div ng-show="duel_id == user.uid" class="timer">
+				{{timer}} 
+				<a ng-click="cancel_duel()" class="btn btn-default">cancel</a>
+			</div>
 			<img ng-src="{{user.avatar}}" alt="">
 			{{user.name}} <strong>({{user.score}})</strong> {{user.status}}
 			<a ng-click="duel(user.uid)" class="btn btn-default">duel</a>
