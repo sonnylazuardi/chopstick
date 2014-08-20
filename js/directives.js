@@ -72,8 +72,8 @@ angular.module('myApp.directives', ['simpleLogin'])
       restrict: 'A',
       templateUrl: 'partials/profile.html',
       link: function(scope, el) {
-        simpleLogin.watch(function(user) {
-          scope.profile = user;
+        simpleLogin.watch(function(my_profile) {
+          scope.my_profile = my_profile;
         });
 
         scope.logout = function() {
