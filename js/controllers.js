@@ -4,75 +4,75 @@
 
 angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
   .controller('LoungeCtrl', ['$scope', 'fbutil', 'user', 'FBURL', '$window', '$location', function($scope, fbutil, user, FBURL, $window, $location) {
-    // var profile = fbutil.syncObject(['users', user.uid]);
-    // profile.$bindTo($scope, 'profile');
+    var profile = fbutil.syncObject(['users_login', user.uid]);
+    profile.$bindTo($scope, 'profile');
 
-    // var onlineusers = fbutil.syncObject('presences');
-    // onlineusers.$bindTo($scope, 'onlineusers');
+    var onlineusers = fbutil.syncObject('presences');
+    onlineusers.$bindTo($scope, 'onlineusers');
 
-    // var duels = fbutil.syncObject(['duels', user.uid]);
-    // duels.$bindTo($scope, 'duels');
+    var duels = fbutil.syncObject(['duels', user.uid]);
+    duels.$bindTo($scope, 'duels');
 
-    // $scope.versus = {};
+    $scope.versus = {};
 
-    // profile.$loaded().then(function(snap) {
-    //   var listRef = fbutil.ref('presences');
-    //   console.log(snap);
-    //   var userObj = {
-    //     uid: user.uid,
-    //     name: snap.name,
-    //     avatar: snap.avatar,
-    //     score: snap.score,
-    //     status: '★ online'
-    //   };
-    //   var userRef = listRef.push(userObj);
+    profile.$loaded().then(function(snap) {
+      var listRef = fbutil.ref('presences');
+      console.log(snap);
+      var userObj = {
+        uid: user.uid,
+        name: snap.name,
+        avatar: snap.avatar,
+        score: snap.score,
+        status: '★ online'
+      };
+      var userRef = listRef.push(userObj);
 
-    //   $scope.duel = function(uid) {
-    //     console.log('duels');
-    //     var roomid = user.uid + '::' + uid;
-    //     var dueling = fbutil.syncObject(['duels', uid]);
-    //     dueling.versus = userObj;
-    //     dueling.roomid = roomid;
-    //     dueling.$save();
+      $scope.duel = function(uid) {
+        console.log('duels');
+        var roomid = user.uid + '::' + uid;
+        var dueling = fbutil.syncObject(['duels', uid]);
+        dueling.versus = userObj;
+        dueling.roomid = roomid;
+        dueling.$save();
 
-    //     var check_accepted = fbutil.syncObject(['versus', roomid]);
-    //     check_accepted.$watch(function() {
-    //       if (check_accepted.start)
-    //         $location.path('versus/'+roomid);
-    //     })
-    //   }
+        var check_accepted = fbutil.syncObject(['versus', roomid]);
+        check_accepted.$watch(function() {
+          if (check_accepted.start)
+            $location.path('versus/'+roomid);
+        })
+      }
 
-    //   $scope.accept_duel = function(roomid) {
-    //     console.log('accept duels');
-    //     var dueling = fbutil.ref('duels', user.uid);
-    //     dueling.remove();
-    //     //redirect to room id
-    //     $location.path('versus/'+roomid);
-    //   }
+      $scope.accept_duel = function(roomid) {
+        console.log('accept duels');
+        var dueling = fbutil.ref('duels', user.uid);
+        dueling.remove();
+        //redirect to room id
+        $location.path('versus/'+roomid);
+      }
 
-    //   var presenceRef = fbutil.ref('.info', 'connected');
-    //   presenceRef.on('value', function(snap) {
-    //     userRef.onDisconnect().remove();
-    //   });
+      var presenceRef = fbutil.ref('.info', 'connected');
+      presenceRef.on('value', function(snap) {
+        userRef.onDisconnect().remove();
+      });
 
-    //   var onIdle = function () {
-    //     userRef.update({status: '☆ idle'});
-    //   }
-    //   var onAway = function () {
-    //     userRef.update({status: '☄ away'});
-    //   }
-    //   var onBack = function () {
-    //     userRef.update({status: '★ online'});
-    //   }
+      var onIdle = function () {
+        userRef.update({status: '☆ idle'});
+      }
+      var onAway = function () {
+        userRef.update({status: '☄ away'});
+      }
+      var onBack = function () {
+        userRef.update({status: '★ online'});
+      }
 
-    //   var idle = new $window.Idle({
-    //     onHidden : onIdle,
-    //     onVisible : onBack,
-    //     onAway : onAway,
-    //     onAwayBack : onBack,
-    //     awayTimeout : 8000 //away with default value of the textbox
-    //   });
-    // });
+      var idle = new $window.Idle({
+        onHidden : onIdle,
+        onVisible : onBack,
+        onAway : onAway,
+        onAwayBack : onBack,
+        awayTimeout : 8000 //away with default value of the textbox
+      });
+    });
   }])
 
   .controller('GameoverCtrl', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location) {
@@ -215,10 +215,10 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
     else 
       $scope.statusPlayer = 2;
 
-    var player1 = fbutil.syncObject(['users', roomsplit[0]]);
+    var player1 = fbutil.syncObject(['users_login', roomsplit[0]]);
     player1.$bindTo($scope, 'player1');
 
-    var player2 = fbutil.syncObject(['users', roomsplit[1]]);
+    var player2 = fbutil.syncObject(['users_login', roomsplit[1]]);
     player2.$bindTo($scope, 'player2');
 
     var p1 = [{
@@ -395,7 +395,7 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
   .controller('AccountCtrl', ['$scope', 'simpleLogin', 'fbutil', 'user', '$location',
     function($scope, simpleLogin, fbutil, user, $location) {
       // create a 3-way binding with the user profile object in Firebase
-      var profile = fbutil.syncObject(['users', user.uid]);
+      var profile = fbutil.syncObject(['users_login', user.uid]);
       profile.$bindTo($scope, 'profile');
 
       // expose logout function to scope

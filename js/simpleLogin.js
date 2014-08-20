@@ -78,7 +78,7 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
   .factory('createProfile', ['fbutil', '$q', '$timeout', function(fbutil, $q, $timeout) {
     return function(id, name, avatar) {
       var def = $q.defer();
-      var user = fbutil.syncObject(['users', id]);
+      var user = fbutil.syncObject(['users_login', id]);
       user.$loaded().then(function() {
         console.log(user);
         if (user.score == undefined) {
