@@ -1,0 +1,10 @@
+<div profile></div>
+
+<h2>Online Users</h2>
+
+<div class="users">
+	<div ng-repeat="user in onlineusers" class="profile-list">
+		<img ng-src="{{user.avatar}}" alt="">
+		{{user.name}} <strong>({{user.score}})</strong> {{user.status}}
+	</div>
+</div>

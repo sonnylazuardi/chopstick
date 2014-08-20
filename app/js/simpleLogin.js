@@ -37,38 +37,14 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
          * @param {string} pass
          * @returns {*}
          */
-        login: function(email, pass) {
-          return auth.$login('password', {
-            email: email,
-            password: pass,
+        login: function() {
+          return auth.$login('facebook', {
             rememberMe: true
           });
         },
 
         logout: function() {
           auth.$logout();
-        },
-
-        createAccount: function(email, pass, name) {
-          return auth.$createUser(email, pass)
-            .then(function() {
-              // authenticate so we have permission to write to Firebase
-              return fns.login(email, pass);
-            })
-            .then(function(user) {
-              // store user data in Firebase after creating account
-              return createProfile(user.uid, email, name).then(function() {
-                return user;
-              })
-            });
-        },
-
-        changePassword: function(email, oldpass, newpass) {
-          return auth.$changePassword(email, oldpass, newpass);
-        },
-
-        changeEmail: function(password, newEmail) {
-          return changeEmail(password, fns.user.email, newEmail, this);
         },
 
         removeUser: function(email, pass) {
@@ -100,9 +76,9 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
     }])
 
   .factory('createProfile', ['fbutil', '$q', '$timeout', function(fbutil, $q, $timeout) {
-    return function(id, email, name) {
+    return function(id, name, userid, avatar, score) {
       var ref = fbutil.ref('users', id), def = $q.defer();
-      ref.set({email: email, name: name||firstPartOfEmail(email)}, function(err) {
+      ref.set({name: name, userid: userid, avatar:avatar, score:score}, function(err) {
         $timeout(function() {
           if( err ) {
             def.reject(err);
@@ -112,18 +88,6 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
           }
         })
       });
-
-      function firstPartOfEmail(email) {
-        return ucfirst(email.substr(0, email.indexOf('@'))||'');
-      }
-
-      function ucfirst (str) {
-        // credits: http://kevin.vanzonneveld.net
-        str += '';
-        var f = str.charAt(0).toUpperCase();
-        return f + str.substr(1);
-      }
-
       return def.promise;
     }
   }]);

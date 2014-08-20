@@ -3,41 +3,36 @@
 angular.module('myApp.routes', ['ngRoute', 'simpleLogin'])
 
   .constant('ROUTES', {
-    '/home': {
-      templateUrl: 'partials/home.html',
-      controller: 'HomeCtrl',
-      resolve: {
-        // forces the page to wait for this promise to resolve before controller is loaded
-        // the controller can then inject `user` as a dependency. This could also be done
-        // in the controller, but this makes things cleaner (controller doesn't need to worry
-        // about auth status or timing of displaying its UI components)
-        user: ['simpleLogin', function(simpleLogin) {
-          return simpleLogin.getUser();
-        }]
-      }
-    },
-    '/chat': {
-      templateUrl: 'partials/chat.html',
-      controller: 'ChatCtrl'
-    },
     '/game': {
       templateUrl: 'partials/game.html',
       controller: 'GameCtrl'
     },
-    '/gameover': {
+    '/game/over': {
       templateUrl: 'partials/gameover.html',
       controller: 'GameoverCtrl'
     },
-    '/login': {
-      templateUrl: 'partials/login.html',
-      controller: 'LoginCtrl'
+    '/lounge': {
+      templateUrl: 'partials/lounge.html',
+      controller: 'LoungeCtrl',
+      authRequired: true
+    },
+    '/gamemultiplayer/over': {
+      templateUrl: 'partials/gamemultiplayerover.html',
+      controller: 'GameMultiplayerCtrl',
+      authRequired: true
+    },
+    '/gamemultiplayer/:id': {
+      templateUrl: 'partials/gamemultiplayer.html',
+      controller: 'GameMultiplayerCtrl',
+      authRequired: true
+    },
+    '/menu': {
+      templateUrl: 'partials/menu.html',
+      controller: 'MenuCtrl'
     },
     '/account': {
       templateUrl: 'partials/account.html',
       controller: 'AccountCtrl',
-      // require user to be logged in to view this route
-      // the whenAuthenticated method below will resolve the current user
-      // before this controller loads and redirect if necessary
       authRequired: true
     }
   })
@@ -80,7 +75,7 @@ angular.module('myApp.routes', ['ngRoute', 'simpleLogin'])
       }
     });
     // routes which are not in our map are redirected to /home
-    $routeProvider.otherwise({redirectTo: '/game'});
+    $routeProvider.otherwise({redirectTo: '/menu'});
   }])
 
   /**

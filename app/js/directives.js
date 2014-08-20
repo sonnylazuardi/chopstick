@@ -65,4 +65,16 @@ angular.module('myApp.directives', ['simpleLogin'])
         simpleLogin.watch(update, scope);
       }
     };
+  }])
+
+  .directive('profile', ['simpleLogin', function(simpleLogin) {
+    return {
+      restrict: 'A',
+      templateUrl: 'partials/profile.html',
+      link: function(scope, el) {
+        simpleLogin.watch(function(user) {
+          scope.profile = user;
+        });
+      }
+    };
   }]);

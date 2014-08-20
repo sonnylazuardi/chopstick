@@ -3,19 +3,50 @@
 /* Controllers */
 
 angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
-  .controller('HomeCtrl', ['$scope', 'fbutil', 'user', 'FBURL', function($scope, fbutil, user, FBURL) {
-    $scope.syncedValue = fbutil.syncObject('syncedValue');
-    $scope.user = user;
-    $scope.FBURL = FBURL;
-  }])
+  .controller('LoungeCtrl', ['$scope', 'fbutil', 'user', 'FBURL', '$window', function($scope, fbutil, user, FBURL, $window) {
+    var profile = fbutil.syncObject(['users', user.uid]);
+    profile.$bindTo($scope, 'profile');
 
-  .controller('ChatCtrl', ['$scope', 'messageList', function($scope, messageList) {
-    $scope.messages = messageList;
-    $scope.addMessage = function(newMessage) {
-      if( newMessage ) {
-        $scope.messages.$add({text: newMessage});
+    var onlineusers = fbutil.syncObject('presences');
+    onlineusers.$bindTo($scope, 'onlineusers');
+
+    profile.$loaded().then(function(snap) {
+      var listRef = new $window.Firebase(FBURL + '/presences');
+      var userObj = {
+        id: snap.userid,
+        name: snap.name,
+        avatar: snap.avatar,
+        score: snap.score,
+        status: '★ online'
+      };
+      var userRef = listRef.push(userObj);
+
+      var presenceRef = new $window.Firebase(FBURL + '/.info/connected');
+      presenceRef.on('value', function(snap) {
+        userRef.onDisconnect().remove();
+      });
+
+      var onIdle = function () {
+        console.log('idle');
+        userRef.update({status: '☆ idle'});
       }
-    };
+      var onAway = function () {
+        console.log('away');
+        userRef.update({status: '☄ away'});
+      }
+      var onBack = function () {
+        console.log('online');
+        userRef.update({status: '★ online'});
+      }
+
+      var idle = new $window.Idle({
+        onHidden : onIdle,
+        onVisible : onBack,
+        onAway : onAway,
+        onAwayBack : onBack,
+        awayTimeout : 8000 //away with default value of the textbox
+      });
+    });
   }])
 
   .controller('GameoverCtrl', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location) {
@@ -76,10 +107,10 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
       //check winner
       if ($scope.p1[0].val == 0 && $scope.p1[1].val == 0) {
         $rootScope.winner = 2;
-        $location.path('/gameover');
+        $location.path('/game/over');
       } else if ($scope.p2[0].val == 0 && $scope.p2[1].val == 0) {
         $rootScope.winner = 1;
-        $location.path('/gameover');
+        $location.path('/game/over');
       }
     }
     $scope.validate = function(source, target) {
@@ -140,46 +171,21 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
     }
   }])
 
-  .controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
-    $scope.email = null;
-    $scope.pass = null;
-    $scope.confirm = null;
-    $scope.createMode = false;
+  .controller('MenuCtrl', ['$scope', 'simpleLogin', '$location', 'createProfile', function($scope, simpleLogin, $location, createProfile) {
 
-    $scope.login = function(email, pass) {
+    $scope.login = function() {
       $scope.err = null;
-      simpleLogin.login(email, pass)
-        .then(function(/* user */) {
-          $location.path('/account');
+      console.log('login');
+      simpleLogin.login()
+        .then(function( user ) {
+          console.log(user);
+          createProfile(user.uid, user.displayName, user.id, user.thirdPartyUserData.picture.data.url, 0).then(function() {
+            $location.path('/lounge');
+          });
         }, function(err) {
           $scope.err = errMessage(err);
         });
     };
-
-    $scope.createAccount = function() {
-      $scope.err = null;
-      if( assertValidAccountProps() ) {
-        simpleLogin.createAccount($scope.email, $scope.pass)
-          .then(function(/* user */) {
-            $location.path('/account');
-          }, function(err) {
-            $scope.err = errMessage(err);
-          });
-      }
-    };
-
-    function assertValidAccountProps() {
-      if( !$scope.email ) {
-        $scope.err = 'Please enter an email address';
-      }
-      else if( !$scope.pass || !$scope.confirm ) {
-        $scope.err = 'Please enter a password';
-      }
-      else if( $scope.createMode && $scope.pass !== $scope.confirm ) {
-        $scope.err = 'Passwords do not match';
-      }
-      return !$scope.err;
-    }
 
     function errMessage(err) {
       return angular.isObject(err) && err.code? err.code : err + '';
@@ -199,38 +205,7 @@ angular.module('myApp.controllers', ['firebase.utils', 'simpleLogin'])
         $location.path('/login');
       };
 
-      $scope.changePassword = function(pass, confirm, newPass) {
-        resetMessages();
-        if( !pass || !confirm || !newPass ) {
-          $scope.err = 'Please fill in all password fields';
-        }
-        else if( newPass !== confirm ) {
-          $scope.err = 'New pass and confirm do not match';
-        }
-        else {
-          simpleLogin.changePassword(profile.email, pass, newPass)
-            .then(function() {
-              $scope.msg = 'Password changed';
-            }, function(err) {
-              $scope.err = err;
-            })
-        }
-      };
-
       $scope.clear = resetMessages;
-
-      $scope.changeEmail = function(pass, newEmail) {
-        resetMessages();
-        profile.$destroy();
-        simpleLogin.changeEmail(pass, newEmail)
-          .then(function(user) {
-            profile = fbutil.syncObject(['users', user.uid]);
-            profile.$bindTo($scope, 'profile');
-            $scope.emailmsg = 'Email changed';
-          }, function(err) {
-            $scope.emailerr = err;
-          });
-      };
 
       function resetMessages() {
         $scope.err = null;
