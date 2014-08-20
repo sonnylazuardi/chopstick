@@ -1,0 +1,151 @@
+/* app css stylesheet */
+@import url(../fonts/clear-sans.css);
+
+ * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    background: #93b874;
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    color: #444f44;
+}
+
+.wrapper {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.logo {
+    background: url('../img/logo.png') no-repeat;
+    width: 308px;
+    height: 210px;
+    margin: 0 auto;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 30px 0;
+}
+
+.explore {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.content {
+    text-align: justify;
+}
+
+.help {
+    margin-top: 40px;
+}
+
+h1, h2, h3 {
+    font-weight: bolder;
+    text-align: center;
+}
+
+h3 {
+    margin: 0;
+}
+
+a {
+    color: #fff;
+}
+
+a:hover {
+    color: #ddd;
+}
+
+.hand-0 {
+    background: url('../img/0.png') no-repeat;
+    width: 200px;
+    height: 200px;
+}
+
+.hand-1 {
+    background: url('../img/1.png') no-repeat;
+    width: 200px;
+    height: 200px;
+}
+
+.hand-2 {
+    background: url('../img/2.png') no-repeat;
+    width: 200px;
+    height: 200px;
+}
+
+.hand-3 {
+    background: url('../img/3.png') no-repeat;
+    width: 200px;
+    height: 200px;
+}
+
+.hand-4 {
+    background: url('../img/4.png') no-repeat;
+    width: 200px;
+    height: 200px;
+}
+
+.hand-5 {
+    background: url('../img/5.png') no-repeat;
+    width: 200px;
+    height: 200px;
+}
+
+.blur {
+    background: transparent;
+    height: 200px;
+    border-radius: 5px;
+}
+.bright {
+    background: #83a666;
+    height: 200px;
+    border-radius: 5px;
+}
+
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+
+.cache {
+    display: none;
+}
+
+.btn-lg {
+    line-height: 2.5em !important;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.profile {
+    background: #83a666;
+    padding: 10px;
+}
+
+.profile-list {
+    padding: 10px;
+    border-bottom: 1px solid #83a666;
+}
+
+.profile-play img {
+    width: 30px;
+    height: 30px;
+}
+
+.profile a.btn, .profile-list a.btn {
+    float: right;
+    margin-right: 10px;
+}
+
+.profile img, .profile-list img {
+    width: 50px;
+    height: 50px;
+}
