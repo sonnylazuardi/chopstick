@@ -76,17 +76,18 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
     }])
 
   .factory('createProfile', ['fbutil', '$q', '$timeout', function(fbutil, $q, $timeout) {
-    return function(id, name, userid, avatar, score) {
-      var ref = fbutil.ref('users', id), def = $q.defer();
-      ref.set({name: name, userid: userid, avatar:avatar, score:score}, function(err) {
-        $timeout(function() {
-          if( err ) {
-            def.reject(err);
-          }
-          else {
-            def.resolve(ref);
-          }
-        })
+    return function(id, name, avatar) {
+      var def = $q.defer();
+      var user = fbutil.syncObject(['users', id]);
+      user.$loaded().then(function() {
+        console.log(user);
+        if (user.score == undefined) {
+          user.score = 0;  
+        }
+        user.name = name;
+        user.avatar = avatar;
+        user.$save();
+        def.resolve(user);
       });
       return def.promise;
     }

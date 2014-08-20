@@ -67,7 +67,7 @@ angular.module('myApp.directives', ['simpleLogin'])
     };
   }])
 
-  .directive('profile', ['simpleLogin', function(simpleLogin) {
+  .directive('profile', ['simpleLogin', '$location', function(simpleLogin, $location) {
     return {
       restrict: 'A',
       templateUrl: 'partials/profile.html',
@@ -75,6 +75,11 @@ angular.module('myApp.directives', ['simpleLogin'])
         simpleLogin.watch(function(user) {
           scope.profile = user;
         });
+
+        scope.logout = function() {
+          simpleLogin.logout();
+          $location.path('/menu');
+        }
       }
     };
   }]);

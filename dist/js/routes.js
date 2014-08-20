@@ -16,14 +16,14 @@ angular.module('myApp.routes', ['ngRoute', 'simpleLogin'])
       controller: 'LoungeCtrl',
       authRequired: true
     },
-    '/gamemultiplayer/over': {
-      templateUrl: 'partials/gamemultiplayerover.html',
-      controller: 'GameMultiplayerCtrl',
+    '/versus/over': {
+      templateUrl: 'partials/versusover.html',
+      controller: 'VersusOverCtrl',
       authRequired: true
     },
-    '/gamemultiplayer/:id': {
-      templateUrl: 'partials/gamemultiplayer.html',
-      controller: 'GameMultiplayerCtrl',
+    '/versus/:id': {
+      templateUrl: 'partials/versus.html',
+      controller: 'VersusCtrl',
       authRequired: true
     },
     '/menu': {
